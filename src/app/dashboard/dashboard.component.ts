@@ -11,25 +11,6 @@ export interface InstanceElement {
   privateIP: string;
 }
 
-const INSTANCE_DATA: InstanceElement[] = [
-  {
-    name: 'marketing-web-01',
-    type: 'medium',
-    state: 'running',
-    id: '1899302-b',
-    publicIP: '54.68.12.146',
-    privateIP: '10.0.0.108'
-  },
-  {
-    name: 'marketing-web-02',
-    type: 'medium',
-    state: 'running',
-    id: '1899302-c',
-    publicIP: '54.68.12.147',
-    privateIP: '10.0.0.109'
-  }
-];
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
