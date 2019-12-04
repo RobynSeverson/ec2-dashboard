@@ -18,6 +18,8 @@ export interface InstanceElement {
 })
 export class DashboardComponent implements OnInit {
   length = 0;
+  pageSize = 10;
+  pageIndex = 0;
   pageSizeOptions: number[] = [10, 25, 100];
   pageEvent: PageEvent;
   dataSource: InstanceElement[];
@@ -30,15 +32,15 @@ export class DashboardComponent implements OnInit {
   }
 
   getPage() {
-    let pageSize = 10;
-    let pageIndex = 0;
-
     if (this.pageEvent) {
-      pageSize = this.pageEvent.pageSize;
-      pageIndex = this.pageEvent.pageIndex;
+      this.pageSize = this.pageEvent.pageSize;
+      this.pageIndex = this.pageEvent.pageIndex;
+    } else {
+      this.pageSize = 10;
+      this.pageIndex = 0;
     }
 
-    this.ec2Service.getInstances(pageSize, pageIndex)
+    this.ec2Service.getInstances(this.pageSize, this.pageIndex)
     .subscribe((data : any) => {
       this.dataSource = null;
       this.dataSource = data.page;
