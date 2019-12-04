@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { default as SampleData } from '../sampleData.json';
+import { Ec2Service } from '../services/ec2.service'; 
 
 export interface InstanceElement {
   name: string;
@@ -17,23 +17,33 @@ export interface InstanceElement {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  length = SampleData.length;
-  pageSize = 10;
-  pageSizeOptions: number[] = [5, 10, 25, 100];
+  length = 0;
+  pageSizeOptions: number[] = [10, 25, 100];
   pageEvent: PageEvent;
   dataSource: InstanceElement[];
-  constructor() { }
+  constructor(
+    private ec2Service: Ec2Service
+  ) { }
 
   ngOnInit() {
     this.getPage();
   }
 
   getPage() {
+    let pageSize = 10;
+    let pageIndex = 0;
+
     if (this.pageEvent) {
-      this.dataSource = SampleData.slice(this.pageEvent.pageIndex * this.pageEvent.pageSize, (this.pageEvent.pageIndex + 1) * this.pageEvent.pageSize);
-    } else {
-      this.dataSource = SampleData.slice(0, this.pageSize);
+      pageSize = this.pageEvent.pageSize;
+      pageIndex = this.pageEvent.pageIndex;
     }
+
+    this.ec2Service.getInstances(pageSize, pageIndex)
+    .subscribe((data : any) => {
+      this.dataSource = null;
+      this.dataSource = data.page;
+      this.length = data.total;
+    });
   }
 
   switchPage(pageEvent: PageEvent) {
