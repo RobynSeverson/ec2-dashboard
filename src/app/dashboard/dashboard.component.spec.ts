@@ -45,10 +45,10 @@ class MockEc2Service extends Ec2Service {
       ];
 
       return of({
-        pageIndex: 0,
-        pageSize: 10,
+        pageIndex,
+        pageSize,
         page: instances,
-        total: 3
+        total: instances.length
       });
   }
 }
